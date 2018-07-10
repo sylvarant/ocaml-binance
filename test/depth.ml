@@ -127,10 +127,9 @@ let command =
   Command.Staged.async ~summary:"Binance depth" begin
     let open Command.Let_syntax in
     [%map_open
-      let symbol = anon ("symbol" %: string)
-      and () = set_level_via_param () in
-      fun () ->
-        main symbol
+      let symbol = anon ("symbol" %: string) in
+      fun () -> main symbol
     ] end
 
 let () = Command.run command
+

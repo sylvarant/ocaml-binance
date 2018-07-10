@@ -8,6 +8,14 @@
   (preprocess (pps (ppx_jane ppxlib.runner)))
   (libraries (ws rest alcotest-async))))
 
+(executable
+ ((name        analyse)
+  (public_name binance-analyse)
+  (package     binance_rest)
+  (modules     (Analyse))
+  (preprocess (pps (ppx_jane ppxlib.runner)))
+  (libraries (ws rest alcotest-async))))
+
 (executables
  ((names        (test))
   (modules      (Test))

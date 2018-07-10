@@ -116,6 +116,29 @@ let destruct_resp enc (resp, json) =
   else
     Ok (Yojson_repr.destruct_safe enc json)
 
+(* ExchangeInfo *)
+module ExchangeInfo = struct
+ type t = string list
+
+ (* get symbols YoJson style *)
+ let get_symbols json = 
+  let open Yojson.Basic.Util in
+   let members = json |> member "symbols" |> to_list in
+   List.map members (fun m -> m |> member "symbol" |> to_string) 
+
+ (* dont use encoding *)
+ let parse_resp (resp, json) =
+  if Cohttp.(Code.is_error (Code.code_of_status resp.Response.status)) then
+    Error (Yojson_repr.destruct_safe BinanceError.encoding json)
+  else
+    Ok (get_symbols (Yojson.Safe.to_basic json))
+
+  let get_symbols ?buf ?log () =
+    call ?buf ?log ~params:[] ~meth:`GET "api/v1/exchangeInfo" >>|
+    parse_resp 
+
+end
+
 module Depth = struct
   type t = {
     last_update_id : int ;

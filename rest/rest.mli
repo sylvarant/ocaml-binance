@@ -13,6 +13,14 @@ module BinanceError : sig
   val to_string : t -> string
 end
 
+module ExchangeInfo : sig
+ type t = string list
+
+  val get_symbols :
+    ?buf:Bi_outbuf.t -> ?log:Log.t -> unit ->
+     (t, BinanceError.t) Result.t Deferred.t
+end
+
 module Depth : sig
   type t = {
     last_update_id : int ;
